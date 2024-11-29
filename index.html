@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pagenation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1 id="title">pagenation</h1>
+    <p id="description">we are going to learn about pagenation</p>
+        <div class="table-responsive">
+    <!-- table -->
+      <table id="table" class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody id="table-body" class="tableBody">
+        
+        </tbody>
+      </table>
+    </div>
+
+    <div type="button" class="d-flex justify-content-center" id="buttons"></div>
+
+    <script>
+      const url =
+        "https://raw.githubusercontent.com/Rajavasanthan/jsondata/master/pagenation.json";
+      let currentpage = 1;
+      let rowsperpage = 5;
+
+      async function fetchData() {
+        const res = await fetch(url);
+        const data = await res.json();
+        console.log(data);
+        displayData(data);
+        pagenation(data.length);
+      }
+
+      function displayData(data) {
+        const tableBody = document.getElementById("table-body");
+        tableBody.innerHTML = "";
+
+        const startIndex = (currentpage - 1) * rowsperpage;
+        const endIndex = startIndex + rowsperpage;
+        const paginationItems = data.slice(startIndex, endIndex);
+        paginationItems.forEach((element) => {
+          const row = `
+                <tr>
+                    <td>${element.id}</td>
+                    <td>${element.name}</td>
+                    <td>${element.email}</td>
+                   
+                </tr>`;
+          tableBody.innerHTML += row;
+        });
+      }
+
+      // set_up pagenation
+      async function fetchData() {
+        const res = await fetch(url);
+        const data = await res.json();
+        console.log(data);
+        displayData(data);
+        pagenation(data.length); 
+      }
+
+      function pagenation(totalRows) {
+        const buttonsContainer = document.getElementById("buttons");
+        buttonsContainer.innerHTML = "";
+        const totalPages = Math.ceil(totalRows / rowsperpage);
+
+        // Create First button
+        const firstButton = document.createElement("button");
+        firstButton.textContent = "First";
+        firstButton.onclick = () => {
+          currentpage = 1; 
+          fetchData();
+        };
+        buttonsContainer.appendChild(firstButton);
+
+        // Create Previous button
+        const prevButton = document.createElement("button");
+        prevButton.textContent = "Prev";
+        prevButton.onclick = () => {
+          if (currentpage > 1) {
+            currentpage--;
+            fetchData();
+          }
+        };
+        buttonsContainer.appendChild(prevButton);
+
+        // Create Next button
+        const nextButton = document.createElement("button");
+        nextButton.innerText = "Next";
+        nextButton.onclick = () => {
+          if (currentpage < totalPages) {
+            currentpage++;
+            fetchData();
+          }
+        };
+        buttonsContainer.appendChild(nextButton);
+
+        // Create Last button
+        const lastButton = document.createElement("button");
+        lastButton.innerText = "Last";
+        lastButton.onclick = () => {
+          currentpage = totalPages;
+          fetchData();
+        };
+        buttonsContainer.appendChild(lastButton);
+      }
+      fetchData();
+    </script>
+    <script src="https://app.zenclass.in/sheets/v1/js/zen/suite/bundle.js"></script>
+  </body>
+</html>
