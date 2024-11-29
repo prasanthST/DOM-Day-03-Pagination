@@ -53,3 +53,6 @@ button {
 button:hover{
     background-color: #0a58ca;
 }
+p{
+    font-size: 19px;
+}
